@@ -35,8 +35,12 @@ stage('Test') {
 
 stage('Run') {
     steps {
-        dir('Spring-demo/target') {
-            bat 'java -jar spring-demo2-0.0.1-SNAPSHOT.jar'
+        dir('Spring-demo/target') { // Go to the target folder
+            sh '''
+                JAR=$(ls *.jar | head -n 1)
+                echo "Running $JAR"
+                java -jar "$JAR"
+            '''
         }
     }
 }
