@@ -17,19 +17,31 @@ pipeline {
                 '''
             }
         }
-
         stage('Build') {
-            steps {
-                echo 'Building the project using Maven...'
-                bat 'mvn clean package'
-            }
+    steps {
+        dir('Spring-demo') {   // run mvn inside the folder where pom.xml is
+            bat 'mvn clean package'
         }
+    }
+}
 
-        stage('Run') {
-            steps {
-                echo 'Starting Spring Boot app on port 9090...'
-                bat 'start /B java -jar target\\springboot-jenkins-demo-1.0.0.jar --server.port=9090'
-            }
+stage('Test') {
+    steps {
+        dir('Spring-demo') {
+            bat 'mvn test'
         }
+    }
+}
+
+stage('Run') {
+    steps {
+        dir('Spring-demo/target') {
+            bat 'java -jar spring-demo2-0.0.1-SNAPSHOT.jar'
+        }
+    }
+}
+
+
+
     }
 }
